@@ -1,3 +1,10 @@
 create web app using flask with react js
 pipenv shell -> to create virtual env
 pipenv install flask flask_restx flask_sqlalchemy flask_jwt_extended
+$env:FLASK_APP = "main.py"
+then falsk shell
+db for install the db
+to create database db.create_all()
+
+
+to create serializer method
