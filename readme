@@ -8,3 +8,8 @@ to create database db.create_all()
 
 
 to create serializer method
+to create and freeze the requirements file  pip freeze > requirements.txt
+to migrate the db pipenv install flask_migrate
+to migrate flask db init
+to add table flask db migrate -m "Initial migration"
+flask db upgrade
