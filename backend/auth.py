@@ -1,7 +1,7 @@
 from flask_restx import Resource, Namespace,fields
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended  import JWTManager, create_access_token, create_refresh_token
+from flask_jwt_extended  import (JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity)
 from models import User
 auth_ns = Namespace('auth',description="A Name Space for our authentication")
 sing_model = auth_ns.model(
@@ -36,9 +36,9 @@ class SingUp(Resource):
         )
         print(new_user)
         new_user.save()
-        return jsonify({
+        return make_response(jsonify({
             "message":f"User {username} created successfully",
-        })
+        }),201)
 
 @auth_ns.route('/login')
 class Login(Resource):
@@ -52,6 +52,15 @@ class Login(Resource):
             access_token = create_access_token(identity=db_user.username)
             refresh_token = create_refresh_token(identity=db_user.username)
             return jsonify({
-                "access_toke":access_token,
+                "access_token":access_token,
                 "refresh_token":refresh_token
             })
+@auth_ns.route('/refresh')
+class Refresh(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user)
+        return make_response(jsonify({
+            "access_token":new_access_token
+        }),200)
