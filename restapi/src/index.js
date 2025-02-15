@@ -4,35 +4,42 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from "./components/NavBar";
 import {
   BrowserRouter as Router,
-  Switch, Route
-} from "react-router-dom"
-const App = () => {
-  useEffect(() => {
-    fetch("http://localhost:5000/hello")
-      .then((response) => {
-        console.log("Response received:", response); // Debugging
-       
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Data:", data)
-        setMessage(data.message)
-      })
-      .catch((error) => console.error("Fetch error:", error));
+  Switch,
+  Route
+} from 'react-router-dom'
+import HomePage from './components/Home';
+import SignUpPage from './components/SignUp';
+import LoginPage from './components/Login';
+import CreateRecipePage from './components/CreateRecipe';
 
-  }, []);
+
+
+
+const App=()=>{
+
   
-  
-  const [message, setMessage] = useState("Hello, React!");
   return (
-    <div>
-      <NavBar/>
-    </div>
-  );
-};
+      <Router>
+      <div className="">
+          <NavBar/>
+          <Switch>
+              <Route path="/create_recipe">
+                  <CreateRecipePage/>
+              </Route>
+              <Route path="/login">
+                  <LoginPage/>
+              </Route>
+              <Route path="/signup">
+                  <SignUpPage/>                
+              </Route>    
+              <Route path="/">
+                  <HomePage/>
+              </Route>
+          </Switch>
+      </div>
+      </Router>
+  )
+}
 
 // Use createRoot instead of render
 const root = ReactDOM.createRoot(document.getElementById("root"));
